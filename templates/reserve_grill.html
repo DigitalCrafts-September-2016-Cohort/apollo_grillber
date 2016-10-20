@@ -8,6 +8,7 @@
    <input type="hidden" name="date" value="{{date}}">
    {% for query in query%}
    <button type="submit" name="size" value="{{query.size}}" class="btn btn-default">{{query.reserve_btn_display}}</button>
+
    {%endfor%}
    </form>
    </div>

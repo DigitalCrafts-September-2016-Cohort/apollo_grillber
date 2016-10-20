@@ -1,24 +1,11 @@
 {%extends "layout.html"%}
 {% block body %}
+<h2>Reserve Your Grill</h2>
 
-    <div class="form-group reserve">
+    <div class="form-group">
 
     <form class="form_style" action="/submit_date" method="POST">
-    <input class="date" type="text" id="datepicker" name="date" placeholder="10/12/2016" required>
-    <!-- <div class="radio">
-      <label class="myeggs">
-      <input type="radio" name="size" value="md" checked>
-      Medium Egg
-    </label>
-    <label class="myeggs">
-      <input type="radio" name="size" value="lg">
-      Large Egg
-    </label>
-    <label class="myeggs">
-      <input type="radio" name="size" value="xl">
-      Extra Large Egg
-    </label>
-    </div> -->
+    <input class="date" type="text" id="datepicker" name="date" placeholder="Choose a date" required>
 
     <button type="submit" name="action" class="btn btn-default">Submit</button>
 

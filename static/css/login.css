@@ -10,7 +10,11 @@ div.container.jumbotron.col-md-offset-4.col-md-4 {
  margin-top: 100px;
 }
 
-.form-group {
+body ul li a .navy_font{
+  font-family: 'Lato', sans-serif;
+}
+
+/*.form-group {
  text-align: center;
  justify-content: center;
  width: 400px;
@@ -18,10 +22,11 @@ div.container.jumbotron.col-md-offset-4.col-md-4 {
  left: 0;
  right: 0;
  margin: auto;
- margin-top: 3em;
-}
 
-.reserve_title {
+}*/
+
+h2, h3 {
   text-align: center;
   margin-top: 2em;
+  color: white;
 }

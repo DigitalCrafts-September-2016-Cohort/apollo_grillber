@@ -2,14 +2,14 @@
 {% block body %}
 
     <form class="form_style" action="/submit_signup" method="POST">
-    <div class="container jumbotron col-md-offset-4 col-md-4">
-      <div class = "form-group">
+
+    <div class="container col-md-offset-4 col-md-4">
+      <div class = "form-group" style="text-align:center">
         <br><br><br>
         <h3>Sign Up</h3>
         <br>
         <input type="text" class="form-control" name="name" placeholder="Name" required>
-        <br>
-        <h4>Address</h4>
+      
         <input type="text" class="form-control" name="street" placeholder="Street Address" required>
         <input type="text" class="form-control" name="zip_code" placeholder="Zipcode" required>
         <input type="text" class="form-control" name="phone" placeholder="Phone" required>
@@ -17,9 +17,10 @@
         <input type="text" class="form-control" name="email" placeholder="Email" required>
         <input type="password" class="form-control" name="password" placeholder="Password" required>
         <br>
-        <button type="submit" name="action" class="btn btn-primary">Sign Up</button>
+        <button type="submit" name="action" class="btn btn-default">Sign Up</button>
         <a class="btn btn-default" href="/login">Login</a>
       </div>
     </div>
     </form>
+
 {% endblock %}
