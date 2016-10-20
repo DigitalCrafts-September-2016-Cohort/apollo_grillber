@@ -63,6 +63,15 @@ def log_in():
     return render_template(
     'login.html'
     )
+
+@app.route('/logout')
+def logout():
+    del session['email']
+    del session['name']
+    return render_template(
+    'grillber.html'
+    )
+
 @app.route('/signup')
 def sign_up():
     return render_template(
@@ -77,7 +86,7 @@ def submit_signup():
     zip_code = request.form.get('zip_code')
     phone = request.form.get('phone')
     name = request.form.get('name')
-    print email+password+street
+
 
     db.insert('customer',
     email = email,
@@ -102,12 +111,8 @@ def submit_login():
         if user.password == password:
             session['email'] = user.email
             session['name'] = user.name
-
-            print "UEEEEEEEERTSRET!!!!"
-            print session['user']
+            print session['name']
             return redirect('/')
-        else:
-            return redirect('/login')
     else:
         return redirect('/login')
 
@@ -139,7 +144,6 @@ def date_submit():
 "(SELECT grill.id from grill left outer join reservation on grill.id = reservation.grill_id where reservation.reserve_date = $1"
 ")",date).namedresult()
     if len(query)>0:
-        print query
         return render_template(
         'reserve_grill.html',
         query = query,
@@ -155,6 +159,20 @@ def reserve_grill():
     render_template(
     'reserve_grill.html'
     )
+@app.route('/submit_reservation',methods =['POST'])
+def reserve_confirmation():
+    grill_size = request.form.get('size')
+    email = session['email']
+    cust_id = db.query("select id from customer where email=$1",email).namedresult()[0].id
+    date = request.form.get('date')
+    print cust_id
+
+    
+
+    return render_template(
+    'reserve_grill.html'
+    )
+
 
 
 if __name__ == '__main__':

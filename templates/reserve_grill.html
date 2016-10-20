@@ -1,13 +1,14 @@
 {%extends "layout.html"%}
 {% block body %}
 
-   <div class="form-group reserve">
+   <div class="form-group">
 
    <form class="form_style" action="/submit_reservation" method="POST">
    <h3> Grills available for {{date}} </h3>
-
+   <input type="hidden" name="date" value="{{date}}">
    {% for query in query%}
-   <button type="submit" name="{{query.name}}" class="btn btn-default">{{query.reserve_btn_display}}</button>
+   <button type="submit" name="size" value="{{query.size}}" class="btn btn-default">{{query.reserve_btn_display}}</button>
+
    {%endfor%}
    </form>
    </div>
