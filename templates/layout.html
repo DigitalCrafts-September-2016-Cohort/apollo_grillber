@@ -7,22 +7,28 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-		<link rel="stylesheet" href="static/css/main.css" />
+		<link rel="stylesheet" href="static/css/navbar.css" />
+    <link rel="stylesheet" href="static/css/login.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
+
+
   </head>
   <body>
     <section id="sidebar">
       <div class="inner">
         <nav>
           <ul>
-            <li><a href="/">Welcome</a></li>
-            <li><a href="/reserve_date">Reserve</a></li>
+            <li><a href="/">WELCOME</a></li>
+            <li><a href="/reserve_date">RESERVE</a></li>
             {% if not session['name'] %}
-            <li><a href="/login">Login</a></li>
+            <li><a href="/login">LOGIN</a></li>
             {% endif %}
             {% if session['name'] %}
-            <li><a href="/login">Logout</a></li>
+            <li><a href="/login">LOGOUT</a></li>
             {% endif %}
-            <li><a>Hello, {{session['name'] or 'there'}}!</a></li>
+            <li><a>HELLO, {{session['name'] or 'THERE'}}!</a></li>
 
           </ul>
         </nav>

@@ -1,0 +1,23 @@
+{%extends "layout.html"%}
+{% block body %}
+
+   <div class="form-group reserve">
+
+   <form class="form_style" action="/submit_reservation" method="POST">
+   <h3> Grills available for {{date}} </h3>
+
+   {% for query in query%}
+   <button type="submit" name="{{query.name}}" class="btn btn-default">{{query.reserve_btn_display}}</button>
+   {%endfor%}
+   </form>
+   </div>
+
+ <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+ <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+ <script>
+ $( function() {
+   $( "#datepicker" ).datepicker();
+ } );
+ </script>
+
+ {% endblock %}
