@@ -40,7 +40,7 @@
     </th>
   </tr>
 </thead>
-{% for reservation in query%}
+{% for reservation in query %}
 
 <tr>
   <td>{{reservation.reserve_date}}</td>
@@ -52,7 +52,7 @@
   <td>{{reservation.email}}</td>
   <td>{{reservation.phone}}</td>
 
-  {% if reservation.is_rented == False %}
+  {% if not reservation.is_rented %}
 
 
   <form action="/submit_rental" method="post">
@@ -63,7 +63,7 @@
       <input type="hidden" name="grill_id" value="{{reservation.g_id}}">
       <input type="hidden" name="rent_date" value="{{reservation.reserve_date}}">
       <input type="hidden" name="rid" value="{{reservation.rid}}">
-      <button type="submit" class = "btn btn-warning" name="rent" value="True">Rent</button>
+      <button type="submit" class = "btn btn-warning" name="rent" value="{{reservation.status}}">Rent</button>
   </td>
 </form>
 
@@ -71,12 +71,13 @@
     <button class="btn btn-danger" type="submit" name="cancel" value="{{reservation.rid}}">Cancel</button>
   </form>
 </td>
-    {%elif reservation.is_rented == True%}
+    {%elif reservation.is_rented %}
     <form action="/submit_rental" method="post">
       <input type="text" name="remarks" value="{{reservation.remarks}}">
     <td>  <input type="hidden" name="grill_id" value="{{reservation.g_id}}">
       <input type="hidden" name="rid" value="{{reservation.rid}}">
-        <button type="submit" class = "btn btn-primary" name="rent" value="False">Return</button>
+      <input type="hidden" name="jason" value="jason">
+        <button type="submit" class = "btn btn-primary" name="rent" value="{{reservation.status}}">Return</button>
     </td>  </form>
 
       {%endif%}

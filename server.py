@@ -222,15 +222,16 @@ def submit_rental():
     rid = request.form.get('rid')
     remarks = request.form.get('remarks')
     rent_date = request.form.get('rent_date')
+    jason = request.form.get('jason')
     print rid
     print status
-    if status == 'True':
+    if not status:
         db.insert('rental',{
         'remarks' : remarks,
         'is_returned' : False,
         'reservation_id' : rid
         })
-    if  status == 'False':
+    if  status:
         print "Reached to print delete"
         db.delete('reservation',
         id = rid,
@@ -243,7 +244,7 @@ def submit_rental():
 
     db.update('grill',{
         'id': grill_id,
-        'is_rented': status
+        'is_rented': not status
     })
     return redirect('/account')
 
