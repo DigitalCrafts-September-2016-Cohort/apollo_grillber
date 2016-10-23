@@ -16,7 +16,7 @@ stripe.api_key = stripe_keys['secret_key']
 
 
 tmp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
-app = Flask('Wiki', template_folder=tmp_dir)
+app = Flask('grillber', template_folder=tmp_dir)
 
 db = pg.DB(
     dbname=os.environ.get('PG_DBNAME'),
@@ -181,7 +181,7 @@ def reserve_confirmation():
 
 @app.route('/account')
 def account():
-    query = db.query("select reservation.id as rid, customer.*, customer_id,reservation.reserve_date, size.size, grill.id as g_id, grill.is_rented, grill.unit_name from reservation inner join grill on reservation.grill_id = grill.id inner join size on grill.size_id = size.id inner join customer on reservation.customer_id = customer.id order by reservation.reserve_date").namedresult()
+    query = db.query("select reservation.id as rid, rental.remarks, customer.*, customer_id,reservation.reserve_date, size.size, grill.id as g_id, grill.is_rented, grill.unit_name from reservation inner join grill on reservation.grill_id = grill.id inner join size on grill.size_id = size.id inner join customer on reservation.customer_id = customer.id left outer join rental on rental.reservation_id = reservation.id order by reservation.reserve_date").namedresult()
     if session['name'] == "owner":
         return render_template(
         'owner_account.html',
@@ -220,19 +220,31 @@ def submit_rental():
     status = request.form.get('rent')
     grill_id = request.form.get('grill_id')
     rid = request.form.get('rid')
+    remarks = request.form.get('remarks')
+    rent_date = request.form.get('rent_date')
     print rid
-
-    if (not status):
+    print status
+    if status == 'True':
+        db.insert('rental',{
+        'remarks' : remarks,
+        'is_returned' : False,
+        'reservation_id' : rid
+        })
+    if  status == 'False':
         print "Reached to print delete"
         db.delete('reservation',
         id = rid,
         )
-
-    else:
-        db.update('grill',{
-            'id': grill_id,
-            'is_rented': status
+        db.update('rental',{
+        'remarks' : remarks,
+        'is_returned' : True
         })
+
+
+    db.update('grill',{
+        'id': grill_id,
+        'is_rented': status
+    })
     return redirect('/account')
 
 if __name__ == '__main__':

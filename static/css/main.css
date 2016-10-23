@@ -1173,7 +1173,7 @@
 
 	}
 
-	@media screen and (max-width: 480px) {
+	@media screen and (max-width: 400px) {
 
 		.row > * {
 			padding: 0 0 0 1.5em;
@@ -3874,7 +3874,13 @@
 
 		@media screen and (max-width: 736px) {
 
-			#sidebar nav ul li.remove {
+			/*#sidebar nav ul li a{
+				padding: 0;
+				margin: 0 -5px;
+				display: inline-block;
+			}*/
+
+				#sidebar nav ul li.remove {
 				display: none;
 			}
 
