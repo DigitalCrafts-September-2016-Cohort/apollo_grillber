@@ -222,7 +222,7 @@ def submit_rental():
     rid = request.form.get('rid')
     remarks = request.form.get('remarks')
     rent_date = request.form.get('rent_date')
-    jason = request.form.get('jason')
+    
     print rid
     print status
     if not status:

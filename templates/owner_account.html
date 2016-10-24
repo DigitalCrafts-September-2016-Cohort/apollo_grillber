@@ -52,7 +52,7 @@
   <td>{{reservation.email}}</td>
   <td>{{reservation.phone}}</td>
 
-  {% if not reservation.is_rented %}
+  {% if reservation.is_rented == "False" %}
 
 
   <form action="/submit_rental" method="post">
@@ -71,12 +71,12 @@
     <button class="btn btn-danger" type="submit" name="cancel" value="{{reservation.rid}}">Cancel</button>
   </form>
 </td>
-    {%elif reservation.is_rented %}
+    {%elif reservation.is_rented == "True" %}
     <form action="/submit_rental" method="post">
       <input type="text" name="remarks" value="{{reservation.remarks}}">
     <td>  <input type="hidden" name="grill_id" value="{{reservation.g_id}}">
       <input type="hidden" name="rid" value="{{reservation.rid}}">
-      <input type="hidden" name="jason" value="jason">
+
         <button type="submit" class = "btn btn-primary" name="rent" value="{{reservation.status}}">Return</button>
     </td>  </form>
 
