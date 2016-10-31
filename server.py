@@ -6,7 +6,6 @@ import stripe
 
 
 # Stripe Keys
-
 stripe_keys = {
   'secret_key': os.environ['SECRET_KEY'],
   'publishable_key': os.environ['PUBLISHABLE_KEY']
@@ -27,27 +26,28 @@ db = pg.DB(
 
 app.secret_key = 'keyur12345'
 
-
-
+#Homepage route
 @app.route('/')
 def login():
     return render_template(
     'grillber.html',
     )
 
+#Calendar page route
 @app.route('/reserve_date')
 def render_date():
     return render_template(
     'reserve.html'
     )
 
-
+#Login page route
 @app.route('/login')
 def log_in():
     return render_template(
     'login.html'
     )
 
+#This route will delete all sessions and route to homepage
 @app.route('/logout')
 def logout():
     del session['email']
@@ -57,12 +57,14 @@ def logout():
     'grillber.html'
     )
 
+#Signup page route
 @app.route('/signup')
 def sign_up():
     return render_template(
     'signup.html'
     )
 
+#This is the route to submit the signup form and inserts it into the database
 @app.route('/submit_signup', methods=['POST'])
 def submit_signup():
     email = request.form.get('email')
@@ -81,7 +83,7 @@ def submit_signup():
     )
     return redirect('/login')
 
-
+#This route checks for correct username and password from the login screen and assigns a session. Either redirects to homepage or gives flash error message and redirects back to login page.
 @app.route('/submit_login', methods=['POST'])
 def submit_login():
     email = request.form.get('email')
@@ -94,10 +96,6 @@ def submit_login():
             session['email'] = user.email
             session['name'] = user.name
             session['id'] = user.id
-
-            print user.email
-            print user.password
-
             return redirect('/')
 
     flash ("Please enter the correct email & password.")
@@ -105,13 +103,13 @@ def submit_login():
 
 
 
-
+#Route that returns grills based on availbility on that date
 @app.route('/submit_date', methods=['POST'])
 def date_submit():
     date = request.form.get('date')
     query = db.query("Select distinct on (size.size) size.size, grill.id as g_id, size.reserve_btn_display from grill inner join size on size.id = grill.size_id and grill.id not in"
 "(SELECT grill.id from grill left outer join reservation on grill.id = reservation.grill_id where reservation.reserve_date = $1"
-")",date).namedresult()
+")",date).namedresult() #The inner query selects the ids of individual grills that are reserved on a specified date.  The outer query omits these results and returns distinct ids for each available grill size.
     if len(query)>0:
         return render_template(
         'reserve_grill.html',
@@ -122,13 +120,14 @@ def date_submit():
         flash ("All grills are booked on this day.")
     return redirect('/reserve_date')
 
-
+#Page that displays previous query as buttons for reserving grills.
 @app.route('/reserve_grill')
 def reserve_grill():
     return render_template(
     'reserve_grill.html'
     )
 
+#Once somebody selects a grill to reserve by pressing the button on the previous page, it goes to Stripe for processing payment.
 @app.route('/charge', methods=['POST'])
 def charge():
     if('id' in session):
@@ -150,7 +149,7 @@ def charge():
         flash('Please login to reserve.')
         return redirect('/login')
 
-
+#If Stripe processing goes through, then the grill is reserved by inserting a column in the reservation table of the database and renders the confirmation page.
 @app.route('/submit_reservation',methods =['POST'])
 
 def reserve_confirmation():
@@ -160,21 +159,19 @@ def reserve_confirmation():
     remarks = request.form.get('remarks')
     email = session['email']
     cust_id = session['id']
-    print session['id']
-    print grill_id
     date = request.form.get('date')
     customer = stripe.Customer.create(
         email=email,
         card=request.form['stripeToken']
         )
         # Only turn on if you want to charge an actual customer.
-    # charge = stripe.Charge.create(
-    #     customer=cust_id,
-    #     amount=price,
-    #     currency='usd',
-    #     description='Rental Charge'
-    # )
-    # size = db.query("select size from size inner join grill on size.id = grill.size_id where grill.id=$1",grill_id).namedresult()[0].size
+        # charge = stripe.Charge.create(
+        #     customer=cust_id,
+        #     amount=price,
+        #     currency='usd',
+        #     description='Rental Charge'
+        # )
+
     db.insert('reservation',
     reserve_date = date,
     grill_id = grill_id,
@@ -188,10 +185,11 @@ def reserve_confirmation():
     size = size
     )
 
+#Renders information for account holder.
 @app.route('/account')
 def account():
     query = db.query("select reservation.remarks,reservation.id as rid, customer.*, customer_id,reservation.reserve_date, size.size, grill.id as g_id, grill.is_rented, grill.unit_name from reservation inner join grill on reservation.grill_id = grill.id inner join size on grill.size_id = size.id inner join customer on reservation.customer_id = customer.id where reservation.is_cancelled = False and reservation.is_returned = False and reservation.reserve_date > now()::date -1 order by reservation.reserve_date").namedresult()
-    if session['name'] == "OWNER" or session['name'] == "owner":
+    if session['name'] == "OWNER" or session['name'] == "owner" or session['name'] == "Owner":
         return render_template(
         'owner_account.html',
         query= query
@@ -202,32 +200,19 @@ def account():
         query = query
         )
 
+#This is the route to cancel a standing reservation.  When someone cancels a reservation, the column in the reservation table is_cancelled turns to True and does not show up on the user's account page.
 @app.route('/submit_cancel',methods =['POST'])
 def cancel_submit():
     reservation_id = request.form.get('cancel')
-    print reservation_id
-    # query = db.query("select * from reservation where reservation.id = $1",reservation_id).namedresult()[0]
 
-    # reserve_date = query.reserve_date
-    # customer_id = query.customer_id
-    # grill_id = query.grill_id
-    # print reserve_date
-    # print customer_id
-    # print grill_id
     db.update('reservation',{
     'id' : reservation_id,
     'is_cancelled' : True
-    }
-
-
-        # reserve_date = query.reserve_date,
-        # customer_id = query.customer_id,
-        # grill_id = query.grill_id
-    )
+    } )
     flash('You have successfully cancelled your reservation')
     return redirect ('/account')
 
-
+#This route turns a reserveration into a rental by clicking the button that is rendered on the HTML page.
 @app.route('/submit_rental', methods=['POST'])
 def submit_rental():
     is_rented = request.form.get('rent')
@@ -236,7 +221,7 @@ def submit_rental():
     rid = request.form.get('rid')
     rent_date = request.form.get('rent_date')
 
-
+# if statement for rental yes/no
     if is_rented == "False":
         db.update('reservation',{
         'id' : rid,
