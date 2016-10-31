@@ -26,20 +26,21 @@
             <li><a href="/logout">LOGOUT</a></li>
             <li><a href="/account">ACCOUNT</a></li>
             {% endif %}
-
           </ul>
         </nav>
       </div>
     </section>
+
       {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class="flashes" style="background-color:orange; font-size : 1.2em;">
-          {% for message in messages %}
-            <li>{{ message }}</li>
-          {% endfor %}
-        </ul>
+        {% if messages %}
+          <ul class="flashes" style="background-color:orange; font-size : 1.2em;">
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
         {% endif %}
-        {% endwith %}
+      {% endwith %}
+
     {% block body %}
     {% endblock %}
   </body>

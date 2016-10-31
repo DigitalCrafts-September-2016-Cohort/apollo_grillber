@@ -1,32 +1,26 @@
 {%extends "layout.html"%}
 {% block body %}
+  <div>
+    <table class="table table-inverse">
+      <tr>
+        <th>reservation date</th>
+        <th>grill size</th>
+        <th>cancel reservation</th>
+      </tr>
 
-<div>
-<table class="table table-inverse">
-  <tr>
-    <th>
-      reservation date
-    </th>
-    <th>
-      grill size
-    </th>
-    <th>
-      cancel reservation
-    </th>
-  </tr>
-{% for reservation in query%}
-  {% if (reservation.customer_id == session['id']) %}
-<tr>
-  <td>{{reservation.reserve_date}}</td>
-  <td>{{reservation.size}}</td>
-<td>  <form action="/submit_cancel" method="post">
-    <button class="btn btn-danger" type="submit" name="cancel" value="{{reservation.rid}}">Cancel</button>
-  </form></td>
-
-</tr>
-  {% endif %}
-{% endfor%}
-</table>
-</div>
-
+      {% for reservation in query%}
+        {% if (reservation.customer_id == session['id']) %}
+          <tr>
+            <td>{{reservation.reserve_date}}</td>
+            <td>{{reservation.size}}</td>
+            <td>
+              <form action="/submit_cancel" method="post">
+              <button class="btn btn-danger" type="submit" name="cancel" value="{{reservation.rid}}">Cancel</button>
+              </form>
+            </td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </table>
+  </div>
 {% endblock %}
