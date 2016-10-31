@@ -33,9 +33,10 @@ h2, h3 {
  color: white;
 }
 
-@media screen and (max-width: 450) {
+@media screen and (max-width: 500px) {
 
-.deleted {
-  display: none;
-}
+  body nav ul li.delete {
+    display: none;
+  }
+
 }

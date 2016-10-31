@@ -29,3 +29,11 @@ a:hover{
 a:active{
  color: white;
 }
+
+@media screen and (max-width: 450) {
+
+ul .deleted {
+  display: none;
+}
+}
+

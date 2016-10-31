@@ -50,7 +50,7 @@
     <h3><script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
             data-key="{{ key }}"
             data-description="Rental Charge"
-            data-amount="{{query.price}}"
+            data-amount="{{query.price * 100}}"
             data-locale="auto"></script></h3>
 
   </form>
