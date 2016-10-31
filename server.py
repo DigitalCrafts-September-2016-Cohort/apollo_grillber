@@ -221,7 +221,7 @@ def submit_rental():
     rid = request.form.get('rid')
     rent_date = request.form.get('rent_date')
 
-
+# if statement for rental yes/no
     if is_rented == "False":
         db.update('reservation',{
         'id' : rid,
